@@ -1,21 +1,48 @@
-# Plugin template
+# plugin.backgroundAssets (publisherId `com.studycat`)
 
-To make it work for Solar2D plugins directory add your plugin content into the plugins directory. Then in revision, which is minimum requirement to run the plugin. Repository name must me `com.publisher.name-plugin.name` as it would be in build settings `["plugin.name"] = { publisherId = "com.publisher.name"}`.
+Apple's Background Assets for Solar2D. It downloads, checks and removes asset packs through the managed Background
+Assets API (`BAAssetPackManager`), with Apple-hosted or self-hosted packs. Current version: 1.0.1.
 
-For example, `mkdir -p plugins/2020.2600/<platform>a`.
+Platforms: iOS, macOS Simulator, Windows Simulator. It needs Solar2D 2026.3731 or newer.
 
+- On iOS 26 and later the calls reach Background Assets. Below iOS 26 the plugin loads and every call reports that it is
+  unsupported, so an app can keep another download path there.
+- In the macOS and Windows Simulators it runs over an emulator of Background Assets, with settings for offline, free
+  disk space and download speed.
 
-Example platforms are:
-* `android-kindle` will use `android` if not found
-* `android` any android platform
-* `macos` only desktop build
-* `mac-sim` desktop build or simulator
-* `win32` only desktop build
-* `win32-sim` desktop build or simulator
-* `web` for html5 builds
-* `html5` same as `web`
-* `iphone` iOS device
-* `iphone-sim` iOS simulator
-* `tvos` AppleTV device
-* `tvos-sim` Apple TV simulator
-* `lua` used if no other applicable platform found
+## build.settings
+
+```lua
+settings =
+{
+    plugins =
+    {
+        ["plugin.backgroundAssets"] =
+        {
+            publisherId = "com.studycat",
+        },
+    },
+}
+```
+
+```lua
+local backgroundAssets = require("plugin.backgroundAssets")
+```
+
+A device build also needs the app setup: a few Info.plist keys, two entitlements and a downloader extension in the
+project's `Extensions/` folder. The setup page covers each one. An app built with Xcode 27 (Solar2D 3733) must target
+iOS 15.0 or later.
+
+To stay on one release, add `version = "vN"` to the entry, with a tag from this repository's Releases page: `v1` is
+1.0.1.
+
+## Links
+
+- Documentation: https://backgroundassets-solar2d.readthedocs.io
+- App setup (keys, entitlements, downloader extension): https://backgroundassets-solar2d.readthedocs.io/en/latest/setup.html
+- Testing in the Simulator: https://backgroundassets-solar2d.readthedocs.io/en/latest/simulator.html
+- Source, changelog and issues: https://github.com/depilz/solar2d-plugin-background-assets
+
+## License
+
+MIT, Copyright (c) 2026 Studycat Limited. See the source repository's LICENSE.
